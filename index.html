@@ -3,68 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Poly Portfolio</title>
+    <title>My Portfolio | Poly Graduate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
-        header { background: #2c3e50; color: #fff; padding: 40px 20px; text-align: center; }
-        header p { font-size: 1.2rem; color: #bdc3c7; }
-        section { margin: 30px auto; padding: 25px; max-width: 800px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; display: inline-block;}
-        .project { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .project:last-child { border-bottom: none; }
-        a { color: #3498db; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; color: #2980b9; }
-        ul { list-style-type: none; padding: 0; }
-        ul li { margin-bottom: 10px; }
-        footer { text-align: center; padding: 20px; margin-top: 40px; color: #7f8c8d; font-size: 0.9rem; }
+        /* --- CSS VARIABLES FOR CONSISTENCY --- */
+        :root {
+            --bg-color: #0a0a0c; /* Deep, rich dark background */
+            --surface-color: #16161a; /* Slightly lighter for cards */
+            --accent-color: #00f2fe; /* Electric blue for attention */
+            --accent-gradient: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- GLOBAL RESET & TYPOGRAPHY --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+        h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--text-main); }
+        h2 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- NAVIGATION (GLASSMORPHISM) --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(10px); /* Creates the frosted glass effect */
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); letter-spacing: 1px;}
+        
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links li a { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); position: relative;}
+        
+        /* Hover animation for nav links */
+        .nav-links li a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background: var(--accent-gradient);
+            transition: var(--transition);
+        }
+        .nav-links li a:hover::after { width: 100%; }
+        .nav-links li a:hover { color: var(--accent-color); }
+
+        /* --- LAYOUT UTILITIES --- */
+        section { padding: 100px 10%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block; padding: 12px 28px;
+            background: var(--accent-gradient); color: #000;
+            border-radius: 30px; font-weight: 700; border: none;
+            cursor: pointer; transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+        .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5); }
+
+        /* --- HERO SECTION --- */
+        #home { align-items: flex-start; }
+        .hero-title { font-size: 4rem; line-height: 1.1; margin-bottom: 20px; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; }
+
+        /* --- SKILLS SECTION --- */
+        .skills-container { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; }
+        .skill-tag {
+            padding: 10px 20px; background: var(--surface-color);
+            border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+        .skill-tag:hover { border-color: var(--accent-color); transform: translateY(-5px); background: rgba(0, 242, 254, 0.05); }
+
+        /* --- PROJECTS GRID --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .card {
+            background: var(--surface-color); border-radius: 12px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: var(--transition);
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-color: rgba(0, 242, 254, 0.3); }
+        
+        .media-placeholder { width: 100%; height: 200px; background: #222; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .media-placeholder img, .media-placeholder video { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-content { padding: 25px; }
+        .card-title { font-size: 1.5rem; margin-bottom: 10px; }
+        .card-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+
+        /* --- ACHIEVEMENTS TIMELINE --- */
+        .timeline { border-left: 2px solid var(--surface-color); padding-left: 20px; margin-top: 30px; }
+        .timeline-item { margin-bottom: 30px; position: relative; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -27px; top: 5px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color);
+        }
+        .timeline-date { color: var(--accent-color); font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
+
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 30px; background: var(--surface-color); color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        /* --- SCROLL ANIMATIONS (Triggered by JS) --- */
+        .hidden { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .show { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>[Your Name]</h1>
-    <p>Polytechnic Student | Tech Enthusiast | Problem Solver</p>
-</header>
+    <nav>
+        <div class="logo">MyPortfolio.</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-<section id="about">
-    <h2>About Me</h2>
-    <p>Hi, I'm [Your Name]. I'm currently studying [Your Course] at [Your Poly]. I love building things that live on the internet, and I'm looking for an opportunity where I can apply my skills in [Skill 1] and [Skill 2] to real-world problems.</p>
-</section>
+    <section id="home" class="hidden">
+        <h1 class="hero-title">Hi, I'm [Your Name].<br>I build <span>digital experiences.</span></h1>
+        <p class="hero-subtitle">A passionate Poly graduate specializing in [Your Specialization], crafting clean code and elegant designs to solve real-world problems.</p>
+        <a href="#projects" class="btn">View My Work</a>
+    </section>
 
-<section id="projects">
-    <h2>My Poly Work</h2>
+    <section id="about" class="hidden">
+        <h2><span>01.</span> About Me</h2>
+        <p style="max-width: 800px; color: var(--text-muted); font-size: 1.1rem;">
+            I recently graduated from [Your Poly] with a Diploma in [Your Course]. My journey started when I discovered a love for creating things from scratch. Whether it's a sleek user interface, a robust database, or a dynamic application, I thrive on turning complex problems into beautiful, intuitive solutions.
+        </p>
+    </section>
 
-    <div class="project">
-        <h3>Project 1: [Project Name]</h3>
-        <p><strong>The Goal:</strong> A web app that solves [specific problem].</p>
-        <p><strong>Tech Stack:</strong> HTML, CSS, JavaScript</p>
-        <p><strong>My Role:</strong> I built the frontend and handled the user interface.</p>
-        <p><a href="[Link to your project/repo]" target="_blank">View Project &rarr;</a></p>
-    </div>
+    <section id="skills" class="hidden">
+        <h2><span>02.</span> My Arsenal</h2>
+        <div class="skills-container">
+            <div class="skill-tag">HTML5 & CSS3</div>
+            <div class="skill-tag">JavaScript (ES6+)</div>
+            <div class="skill-tag">UI/UX Design</div>
+            <div class="skill-tag">Figma</div>
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">SQL Databases</div>
+            <div class="skill-tag">Agile Methodologies</div>
+        </div>
+    </section>
 
-    <div class="project">
-        <h3>Project 2: [Project Name]</h3>
-        <p><strong>The Goal:</strong> A database system designed for [target audience].</p>
-        <p><strong>Tech Stack:</strong> Python, SQL</p>
-        <p><strong>My Role:</strong> Designed the database schema and wrote the backend logic.</p>
-        <p><a href="[Link to your project/repo]" target="_blank">View Project &rarr;</a></p>
-    </div>
-</section>
+    <section id="projects" class="hidden">
+        <h2><span>03.</span> Featured Projects</h2>
+        <div class="grid">
+            
+            <div class="card">
+                <div class="media-placeholder">
+                    <span style="color:#555;">[Image Placeholder]</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">E-Commerce Redesign</h3>
+                    <p class="card-desc">A complete UI/UX overhaul and frontend build for a local retail business. Improved user retention by 20%.</p>
+                    <a href="#" class="btn" style="padding: 8px 16px; font-size: 0.8rem;">View Case Study</a>
+                </div>
+            </div>
 
-<section id="contact">
-    <h2>Let's Connect</h2>
-    <p>Check out my resume or reach out to me directly!</p>
-    <ul>
-        <li><a href="[Link to your resume.pdf]" target="_blank">📄 Download My Resume</a></li>
-        <li><a href="mailto:[Your Email]">📧 Email Me</a></li>
-        <li><a href="[Your LinkedIn URL]" target="_blank">💼 LinkedIn</a></li>
-        <li><a href="https://github.com/[Your GitHub Username]" target="_blank">💻 GitHub</a></li>
-    </ul>
-</section>
+            <div class="card">
+                <div class="media-placeholder">
+                    <span style="color:#555;">[Video Placeholder]</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Inventory Dashboard</h3>
+                    <p class="card-desc">A responsive dashboard pulling real-time data to track inventory levels. Built with JS and Chart.js.</p>
+                    <a href="#" class="btn" style="padding: 8px 16px; font-size: 0.8rem;">View Live Demo</a>
+                </div>
+            </div>
 
-<footer>
-    <p>&copy; 2026 [Your Name]. Built from scratch.</p>
-</footer>
+        </div>
+    </section>
 
+    <section id="achievements" class="hidden">
+        <h2><span>04.</span> Achievements & Milestones</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">2026</div>
+                <h3>Graduated with Merit</h3>
+                <p style="color: var(--text-muted);">Diploma in [Your Course] from [Your Polytechnic]. Achieved a GPA of [Your GPA - optional].</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025</div>
+                <h3>Hackathon Finalist</h3>
+                <p style="color: var(--text-muted);">Led a team of 4 to the finals in the [Name of Hackathon] by building a sustainable tech solution.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="hidden" style="text-align: center; align-items: center; min-height: 70vh;">
+        <h2><span>05.</span> Get In Touch</h2>
+        <p style="color: var(--text-muted); max-width: 500px; margin-bottom: 30px;">
+            I'm currently looking for new opportunities and my inbox is always open. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+        </p>
+        <a href="mailto:[Your Email Address]" class="btn">Say Hello</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 [Your Name]. Designed & Built with passion.</p>
+    </footer>
+
+    <script>
+        // This JavaScript watches the elements on the screen. 
+        // When you scroll down and an element enters the view, it adds the "show" class to trigger the CSS animation.
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, {
+            threshold: 0.1 // Triggers when 10% of the element is visible
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
 </body>
 </html>
